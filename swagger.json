@@ -1,0 +1,410 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API for the  Service layer for the vertical closed-loop integration developed by UC3M and the respective open-source tools used for the 5G-TOURS project. This work has been partly funded by the European Commission through the H2020 project [5G-Tours](https://5gtours.eu/) (Grant Agreement no. 856950)",
+    "version": "1.0.0",
+    "title": "Service layer for the vertical closed-loop integration",
+    "contact": {
+      "email": "mgramagl@it.uc3m.es"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "etsienipoc9",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "knob",
+      "description": "Coarse parametrization for the forecasting",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://github.com/wnlUc3m/AZTEC"
+      }
+    },
+    {
+      "name": "stats",
+      "description": "Access to forecasting statistics"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/knob": {
+      "post": {
+        "tags": [
+          "knob"
+        ],
+        "summary": "Changes the α parameter",
+        "description": "Changes the high level knob for the balance between SLA violations and Overprovisioning",
+        "operationId": "setKnob",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "alpha",
+            "description": "Knob object that needs to be included",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Knob"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "knob_auth": [
+              "write:knob",
+              "read:knob"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "knob"
+        ],
+        "summary": "Updates the α parameter",
+        "description": "Updates the high level knob for the balance between SLA violations and Overprovisioning",
+        "operationId": "updateKnob",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "alpha",
+            "description": "Alpha object that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Knob"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "knob_auth": [
+              "write:knob",
+              "read:knob"
+            ]
+          }
+        ]
+      }
+    },
+    "/knob/overprovisioning": {
+      "post": {
+        "tags": [
+          "knob"
+        ],
+        "summary": "Changes the Overprovisioning penalty",
+        "description": "",
+        "operationId": "changeKo",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "overprovisioning",
+            "description": "Overprovisioning object that needs to be included",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Overprovisioning"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "knob_auth": [
+              "write:knob",
+              "read:knob"
+            ]
+          }
+        ]
+      }
+    },
+    "/knob/sla": {
+      "post": {
+        "tags": [
+          "knob"
+        ],
+        "summary": "Changes the SLA violation penalty",
+        "description": "",
+        "operationId": "changeKv",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "sla",
+            "description": "SLA violation object that needs to be included",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SLA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "knob_auth": [
+              "write:knob",
+              "read:knob"
+            ]
+          }
+        ]
+      }
+    },
+    "/stats/overprovisioning": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "summary": "Returns statistics about Overprovisioning in the current resource consumption",
+        "description": "Returns details about amount and cost of overprovisioning",
+        "operationId": "getOverprovisoning",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/StatsOverprovisoning"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/stats/sla": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "summary": "Returns statistics about SLA violations",
+        "description": "Returns details about number of time intervals and cost of overprovisioning",
+        "operationId": "getSLA",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/StatsSLA"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "knob_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://etsienipoc9/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:knob": "Change the knob values (either coarse or fine)",
+        "read:knob": "Read the knob values (either coarse or fine)",
+        "read:stats": "Read current statistics"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Knob": {
+      "type": "object",
+      "required": [
+        "alpha"
+      ],
+      "properties": {
+        "alpha": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "xml": {
+        "name": "Knob"
+      }
+    },
+    "Overprovisioning": {
+      "type": "object",
+      "required": [
+        "overprovisioning"
+      ],
+      "properties": {
+        "overprovisioning": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "xml": {
+        "name": "Overprovisioning"
+      }
+    },
+    "StatsOverprovisoning": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "cost": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "xml": {
+        "name": "Overprovisioning"
+      }
+    },
+    "SLA": {
+      "type": "object",
+      "required": [
+        "sla"
+      ],
+      "properties": {
+        "sla": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "xml": {
+        "name": "SLA"
+      }
+    },
+    "StatsSLA": {
+      "type": "object",
+      "properties": {
+        "intervals": {
+          "type": "number",
+          "format": "float"
+        },
+        "cost": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "xml": {
+        "name": "SLA"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "ETSI ENI PoC Wiki Page",
+    "url": "https://eniwiki.etsi.org/index.php?title=Poc_09:_Autonomous_Network_Slice_Management_for_5G_Vertical_Services"
+  }
+}
